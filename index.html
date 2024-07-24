@@ -3,15 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aprende Inglés</title>
+    <title>Cuestionario en Inglés</title>
+    <link rel="stylesheet" href="./css/styles.css">
     <script defer src="./js/script.js"></script>
+
 </head>
 <body>
-    <section class="section">
-        <div>
-            <h1>Cuestionario de Ingles</h1>
-            <p>Funciona como una evaluacion de ingles, con preguntas y respuestas en multiple choise. Cada respuesta te da un punto, al final del cuestionario vas a ver cuantos puntos sumaste</p>
-        </div>
-    </section>
-</body>
+    <div id="inicio">
+        <h1>Bienvenido al cuestionario de preguntas en inglés</h1>
+        <button onclick="comenzarCuestionario()">Comenzar</button>
+        <button onclick="mostrarFormulario()">Agregar Preguntas</button>
+        <button onclick="borrarPreguntas()">Borrar Todas las Preguntas</button>
+    </div>
+    <div id="cuestionario" style="display: none;">
+        <div id="timer"></div>
+        <h2 id="pregunta"></h2>
+        <div id="opciones"></div>
+    </div>
+    <div id="resultado" style="display: none;">
+        <h2 id="score"></h2>
+        <div id="detalle"></div>
+        <button onclick="volverInicio()">Volver al Inicio</button>
+        <button onclick="cerrarCuestionario()">Cerrar</button>
+    </div>
+    <div id="formulario" style="display: none;">
+        <h2>Agregar Nueva Pregunta</h2>
+        <form id="nuevaPreguntaForm">
+            <label for="nuevaPregunta">Pregunta:</label><br>
+            <input type="text" id="nuevaPregunta" name="nuevaPregunta"><br><br>
+            <label for="opcion1">Opción 1:</label><br>
+            <input type="text" id="opcion1" name="opcion1"><br><br>
+            <label for="opcion2">Opción 2:</label><br>
+            <input type="text" id="opcion2" name="opcion2"><br><br>
+            <label for="opcion3">Opción 3:</label><br>
+            <input type="text" id="opcion3" name="opcion3"><br><br>
+            <label for="opcion4">Opción 4:</label><br>
+            <input type="text" id="opcion4" name="opcion4"><br><br>
+            <label for="respuestaCorrecta">Respuesta Correcta:</label><br>
+            <input type="text" id="respuestaCorrecta" name="respuestaCorrecta"><br><br>
+            <button type="button" onclick="agregarPregunta()">Agregar Pregunta</button>
+        </form>
+        <button onclick="ocultarFormulario()">Volver</button>
+    </div></body>
 </html>
+
