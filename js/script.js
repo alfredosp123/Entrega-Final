@@ -1,36 +1,47 @@
-const preguntas = [
+let preguntas = JSON.parse(localStorage.getItem('preguntas')) || [
     {
         pregunta: "¿Cómo se dice 'manzana' en inglés?",
         opciones: ["Apple", "Banana", "Orange", "Grapes"],
         respuesta: "Apple"
-    },
-    {
-        pregunta: "¿Cómo se dice 'libro' en inglés?",
-        opciones: ["Pen", "Notebook", "Book", "Pencil"],
-        respuesta: "Book"
-    },
-    {
-        pregunta: "¿Cómo se dice 'casa' en inglés?",
-        opciones: ["Car", "House", "Tree", "Window"],
-        respuesta: "House"
-    },
-    {
-        pregunta: "¿Cómo se dice 'perro' en inglés?",
-        opciones: ["Cat", "Horse", "paste", "Dog"],
-        respuesta: "Dog"
-    },
-    {
-        pregunta: "¿Cómo se dice 'Árbol' en inglés?",
-        opciones: ["Palm", "Dance", "Tree", "Shoes"],
-        respuesta: "Tree"
     }
 ];
 
+let historial = JSON.parse(localStorage.getItem('historial')) || [];
 let preguntaActual = 0;
 let score = 0;
 let resultados = [];
+let timer;
+let nombreCompleto;
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('comenzarBtn').addEventListener('click', comenzarCuestionario);
+    document.getElementById('agregarBtn').addEventListener('click', mostrarFormulario);
+    document.getElementById('borrarBtn').addEventListener('click', borrarPreguntas);
+    document.getElementById('agregarPreguntaBtn').addEventListener('click', agregarPregunta);
+    document.getElementById('volverFormularioBtn').addEventListener('click', volverInicioDesdeFormulario);
+    document.getElementById('volverBtn').addEventListener('click', volverInicio);
+    document.getElementById('cerrarBtn').addEventListener('click', cerrarCuestionario);
+    document.getElementById('verHistorialBtn').addEventListener('click', verHistorial);
+    document.getElementById('volverInicioDesdeHistorialBtn').addEventListener('click', volverInicioDesdeHistorial);
+});
+
+function guardarPreguntas() {
+    localStorage.setItem('preguntas', JSON.stringify(preguntas));
+}
+
+function guardarHistorial() {
+    localStorage.setItem('historial', JSON.stringify(historial));
+}
 
 function comenzarCuestionario() {
+    nombreCompleto = document.getElementById('nombreCompleto').value.trim();
+    const mensajeNombre = document.getElementById('mensajeNombre');
+    
+    if (nombreCompleto === "") {
+        mensajeNombre.textContent = "Por favor, ingresa tu nombre completo.";
+        return;
+    }
+
     document.getElementById("inicio").style.display = "none";
     document.getElementById("cuestionario").style.display = "block";
     cargarPreguntas();
@@ -41,8 +52,13 @@ function cargarPreguntas() {
         const currentQuestion = preguntas[preguntaActual];
         document.getElementById("pregunta").textContent = `Pregunta ${preguntaActual + 1}: ${currentQuestion.pregunta}`;
         document.getElementById("opciones").innerHTML = currentQuestion.opciones.map((option, index) => 
-            `<button onclick="check(${index + 1})">${index + 1}: ${option}</button>`
+            `<button data-index="${index}">${index + 1}: ${option}</button>`
         ).join('');
+
+        document.querySelectorAll('#opciones button').forEach(btn => {
+            btn.addEventListener('click', (e) => check(parseInt(e.target.dataset.index) + 1));
+        });
+
         startTimer();
     } else {
         mostrarResultado();
@@ -66,13 +82,22 @@ function check(respuesta) {
 function mostrarResultado() {
     document.getElementById("cuestionario").style.display = "none";
     document.getElementById("resultado").style.display = "block";
-    document.getElementById("score").textContent = `¡Has terminado! Tu puntaje es ${score} de ${preguntas.length}.`;
+    document.getElementById("score").textContent = `¡Has terminado, ${nombreCompleto}! Tu puntaje es ${score} de ${preguntas.length}.`;
+
+    resultados.forEach(resultado => historial.push({
+        nombre: nombreCompleto,
+        pregunta: resultado.pregunta,
+        correcto: resultado.correcto,
+        respuestaCorrecta: resultado.respuestaCorrecta
+    }));
+
+    guardarHistorial();
+
     document.getElementById("detalle").innerHTML = resultados.map((resultado, index) =>
         `<p>Pregunta ${index + 1}: ${resultado.pregunta} - ${resultado.correcto ? "Correcto" : `Incorrecto. Respuesta correcta: ${resultado.respuestaCorrecta}`}</p>`
     ).join('');
 }
 
-let timer;
 function startTimer() {
     let timeLeft = 120;
     document.getElementById("timer").textContent = `Tiempo restante: ${timeLeft} segundos`;
@@ -91,9 +116,9 @@ function mostrarFormulario() {
     document.getElementById("formulario").style.display = "block";
 }
 
-function ocultarFormulario() {
+function volverInicioDesdeFormulario() {
     document.getElementById("formulario").style.display = "none";
-    document.getElementById("inicio").style.display = "block";
+    document.getElementById("inicio").style.display = "flex";
 }
 
 function agregarPregunta() {
@@ -103,9 +128,10 @@ function agregarPregunta() {
     const opcion3 = document.getElementById("opcion3").value.trim();
     const opcion4 = document.getElementById("opcion4").value.trim();
     const respuesta = document.getElementById("respuestaCorrecta").value.trim();
-    
+    const mensajeFormulario = document.getElementById("mensajeFormulario");
+
     if (pregunta === "" || opcion1 === "" || opcion2 === "" || opcion3 === "" || opcion4 === "" || respuesta === "") {
-        alert("Por favor, completa todos los campos.");
+        mensajeFormulario.textContent = "Por favor, completa todos los campos.";
         return;
     }
 
@@ -116,26 +142,52 @@ function agregarPregunta() {
     };
 
     preguntas.push(nuevaPregunta);
+    guardarPreguntas();
 
     document.getElementById("nuevaPreguntaForm").reset();
-    alert("Pregunta agregada exitosamente");
+    mensajeFormulario.textContent = "Pregunta agregada exitosamente";
+}
+
+function borrarPreguntas() {
+    preguntas = [];
+    guardarPreguntas();
+    document.getElementById("mensajeInicio").textContent = "Todas las preguntas han sido borradas.";
 }
 
 function volverInicio() {
     document.getElementById("resultado").style.display = "none";
-    document.getElementById("inicio").style.display = "block";
-    preguntaActual = 0;
-    score = 0;
-    resultados = [];
+    document.getElementById("inicio").style.display = "flex";
+    resetCuestionario();
 }
 
 function cerrarCuestionario() {
-    window.close();
+    document.getElementById("resultado").style.display = "none";
+    document.getElementById("inicio").style.display = "flex";
+    resetCuestionario();
 }
 
-function borrarPreguntas() {
-    if (confirm("¿Estás seguro de que deseas borrar todas las preguntas?")) {
-        preguntas.length = 0;
-        alert("Todas las preguntas han sido borradas.");
-    }
+function verHistorial() {
+    document.getElementById("inicio").style.display = "none";
+    document.getElementById("historial").style.display = "block";
+    mostrarHistorial();
+}
+
+function mostrarHistorial() {
+    document.getElementById("contenidoHistorial").innerHTML = historial.map(entry => 
+        `<p>${entry.nombre} - Pregunta: ${entry.pregunta} - ${entry.correcto ? "Correcto" : `Incorrecto (Respuesta correcta: ${entry.respuestaCorrecta})`}</p>`
+    ).join('');
+}
+
+function volverInicioDesdeHistorial() {
+    document.getElementById("historial").style.display = "none";
+    document.getElementById("inicio").style.display = "flex";
+}
+
+function resetCuestionario() {
+    preguntaActual = 0;
+    score = 0;
+    resultados = [];
+    document.getElementById("mensajeNombre").textContent = '';
+    document.getElementById("mensajeInicio").textContent = '';
+    document.getElementById("mensajeFormulario").textContent = '';
 }

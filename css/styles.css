@@ -1,28 +1,53 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    text-align: center;
     margin: 0;
     padding: 0;
 }
 
-#inicio, #cuestionario, #resultado {
+#inicio, #cuestionario, #resultado, #formulario {
+    margin: 20px;
     padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
+#nombreCompleto {
+    display: flex;
+    text-align: center;
+    background-color: #0000004f;
+    border: 3px;
+    border-radius: 55px;
+}
+
+#inicio label
+{
+    display: flex;
+    justify-content: center;
+}
+
+
 
 button {
     padding: 10px 20px;
+    margin: 10px;
     font-size: 16px;
-    margin: 5px;
     cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
 }
 
-#timer {
-    font-size: 18px;
-    margin-bottom: 20px;
+button:hover {
+    background-color: #0056b3;
 }
 
-#opciones button {
-    display: block;
-    margin: 10px auto;
+p {
+    font-size: 14px;
+    color: red;
 }

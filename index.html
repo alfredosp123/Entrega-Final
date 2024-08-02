@@ -6,14 +6,18 @@
     <title>Cuestionario en Inglés</title>
     <link rel="stylesheet" href="./css/styles.css">
     <script defer src="./js/script.js"></script>
-
 </head>
 <body>
     <div id="inicio">
         <h1>Bienvenido al cuestionario de preguntas en inglés</h1>
-        <button onclick="comenzarCuestionario()">Comenzar</button>
-        <button onclick="mostrarFormulario()">Agregar Preguntas</button>
-        <button onclick="borrarPreguntas()">Borrar Todas las Preguntas</button>
+        <label for="nombreCompleto">Ingrese su nombre completo:</label><br>
+        <input type="text" id="nombreCompleto" placeholder="Nombre completo"><br><br>
+        <p id="mensajeNombre" class="mensaje"></p>
+        <button id="comenzarBtn">Comenzar</button>
+        <button id="agregarBtn">Agregar Preguntas</button>
+        <button id="borrarBtn">Borrar Todas las Preguntas</button>
+        <button id="verHistorialBtn">Ver Historial</button>
+        <p id="mensajeInicio" class="mensaje"></p>
     </div>
     <div id="cuestionario" style="display: none;">
         <div id="timer"></div>
@@ -23,8 +27,8 @@
     <div id="resultado" style="display: none;">
         <h2 id="score"></h2>
         <div id="detalle"></div>
-        <button onclick="volverInicio()">Volver al Inicio</button>
-        <button onclick="cerrarCuestionario()">Cerrar</button>
+        <button id="volverBtn">Volver al Inicio</button>
+        <button id="cerrarBtn">Cerrar</button>
     </div>
     <div id="formulario" style="display: none;">
         <h2>Agregar Nueva Pregunta</h2>
@@ -41,9 +45,15 @@
             <input type="text" id="opcion4" name="opcion4"><br><br>
             <label for="respuestaCorrecta">Respuesta Correcta:</label><br>
             <input type="text" id="respuestaCorrecta" name="respuestaCorrecta"><br><br>
-            <button type="button" onclick="agregarPregunta()">Agregar Pregunta</button>
+            <button type="button" id="agregarPreguntaBtn">Agregar Pregunta</button>
         </form>
-        <button onclick="ocultarFormulario()">Volver</button>
-    </div></body>
+        <button id="volverFormularioBtn">Volver</button>
+        <p id="mensajeFormulario" class="mensaje"></p>
+    </div>
+    <div id="historial" style="display: none;">
+        <h2>Historial de Preguntas Realizadas</h2>
+        <div id="contenidoHistorial"></div>
+        <button id="volverInicioDesdeHistorialBtn">Volver al Inicio</button>
+    </div>
+</body>
 </html>
-
