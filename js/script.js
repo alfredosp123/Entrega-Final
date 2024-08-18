@@ -1,11 +1,5 @@
-let preguntas = JSON.parse(localStorage.getItem('preguntas')) || [
-    {
-        pregunta: "¿Cómo se dice 'manzana' en inglés?",
-        opciones: ["Apple", "Banana", "Orange", "Grapes"],
-        respuesta: "Apple"
-    }
-];
-
+// Sección de preguntas y historial
+let preguntas = [];
 let historial = JSON.parse(localStorage.getItem('historial')) || [];
 let preguntaActual = 0;
 let score = 0;
@@ -23,7 +17,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('cerrarBtn').addEventListener('click', cerrarCuestionario);
     document.getElementById('verHistorialBtn').addEventListener('click', verHistorial);
     document.getElementById('volverInicioDesdeHistorialBtn').addEventListener('click', volverInicioDesdeHistorial);
+    cargarPreguntasDesdeArchivo();
+    document.getElementById('borrarHistorialBtn').addEventListener('click', borrarHistorial);
 });
+
+function cargarPreguntasDesdeArchivo() {
+    fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+            preguntas = data;
+        })
+        .catch(error => console.error('Error al cargar las preguntas desde el archivo JSON:', error));
+}
 
 function guardarPreguntas() {
     localStorage.setItem('preguntas', JSON.stringify(preguntas));
@@ -190,4 +195,10 @@ function resetCuestionario() {
     document.getElementById("mensajeNombre").textContent = '';
     document.getElementById("mensajeInicio").textContent = '';
     document.getElementById("mensajeFormulario").textContent = '';
+}
+
+function borrarHistorial() {
+    historial = [];
+    guardarHistorial();
+    document.getElementById('mensajeInicio').textContent = "El historial ha sido borrado.";
 }
