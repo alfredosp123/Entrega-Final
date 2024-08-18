@@ -16,6 +16,7 @@ let rol;
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('seleccionarRolBtn').addEventListener('click', seleccionarRol);
+    document.getElementById('cambiarRolBtn').addEventListener('click', cambiarRol);
     document.getElementById('comenzarBtn').addEventListener('click', comenzarCuestionario);
     document.getElementById('agregarBtn').addEventListener('click', mostrarFormulario);
     document.getElementById('borrarBtn').addEventListener('click', borrarPreguntas);
@@ -36,6 +37,11 @@ function seleccionarRol() {
     actualizarBotones();
 }
 
+function cambiarRol() {
+    document.getElementById('rolSeleccion').style.display = 'block';
+    document.getElementById('inicio').style.display = 'none';
+}
+
 function actualizarBotones() {
     if (rol === 'alumno') {
         document.getElementById('agregarBtn').style.display = 'none';
@@ -46,6 +52,7 @@ function actualizarBotones() {
         document.getElementById('borrarBtn').style.display = 'inline-block';
         document.getElementById('borrarHistorialBtn').style.display = 'inline-block';
     }
+    document.getElementById('cambiarRolBtn').style.display = 'inline-block';
 }
 
 function guardarPreguntas() {
@@ -93,12 +100,12 @@ function check(respuesta) {
     const selectedOption = currentQuestion.opciones[respuesta - 1];
     if (selectedOption === currentQuestion.respuesta) {
         score++;
-        resultados.push({ pregunta: currentQuestion.pregunta, correcto: true });
+        resultados.push({ pregunta: currentQuestion.pregunta, correcto: true, respuestaCorrecta: currentQuestion.respuesta });
     } else {
         resultados.push({ pregunta: currentQuestion.pregunta, correcto: false, respuestaCorrecta: currentQuestion.respuesta });
     }
+
     preguntaActual++;
-    clearInterval(timer);
     cargarPreguntas();
 }
 
@@ -141,6 +148,16 @@ function mostrarFormulario() {
     }
     document.getElementById("inicio").style.display = "none";
     document.getElementById("formulario").style.display = "block";
+    mostrarPreguntasFormulario(); // Mostrar preguntas existentes para previsualizar
+}
+
+function mostrarPreguntasFormulario() {
+    if (rol === 'profesor') {
+        const contenido = preguntas.map((p, index) =>
+            `<p>Pregunta ${index + 1}: ${p.pregunta} - Opciones: ${p.opciones.join(', ')}</p>`
+        ).join('');
+        document.getElementById('contenidoFormulario').innerHTML = contenido;
+    }
 }
 
 function volverInicioDesdeFormulario() {
@@ -178,6 +195,7 @@ function agregarPregunta() {
 
     document.getElementById("nuevaPreguntaForm").reset();
     mensajeFormulario.textContent = "Pregunta agregada exitosamente";
+    mostrarPreguntasFormulario(); // Actualizar vista de preguntas existentes
 }
 
 function borrarPreguntas() {
@@ -235,17 +253,4 @@ function resetCuestionario() {
     resultados = [];
     clearInterval(timer);
     document.getElementById("timer").textContent = '';
-}
-
-function startTimer() {
-    let timeLeft = 120;
-    document.getElementById("timer").textContent = `Tiempo restante: ${timeLeft} segundos`;
-    timer = setInterval(() => {
-        timeLeft--;
-        document.getElementById("timer").textContent = `Tiempo restante: ${timeLeft} segundos`;
-        if (timeLeft <= 0) {
-            clearInterval(timer);
-            check(-1); // Autocheck si el tiempo se agota
-        }
-    }, 1000);
 }
