@@ -8,7 +8,17 @@
     <script defer src="./js/script.js"></script>
 </head>
 <body>
-    <div id="inicio">
+    <div id="rolSeleccion">
+        <h1>Selecciona tu rol</h1>
+        <label for="rol">Seleccione su rol:</label><br>
+        <select id="rol">
+            <option value="alumno">Alumno</option>
+            <option value="profesor">Profesor</option>
+        </select><br><br>
+        <button id="seleccionarRolBtn">Continuar</button>
+    </div>
+
+    <div id="inicio" style="display: none;">
         <h1>Bienvenido al cuestionario de preguntas en inglés</h1>
         <label for="nombreCompleto">Ingrese su nombre completo:</label><br>
         <input type="text" id="nombreCompleto" placeholder="Nombre completo"><br><br>
@@ -16,21 +26,24 @@
         <button id="comenzarBtn">Comenzar</button>
         <button id="agregarBtn">Agregar Preguntas</button>
         <button id="borrarBtn">Borrar Todas las Preguntas</button>
-        <button id="verHistorialBtn">Ver Historial</button>
         <button id="borrarHistorialBtn">Borrar Historial</button>
+        <button id="verHistorialBtn">Ver Historial</button>
         <p id="mensajeInicio" class="mensaje"></p>
     </div>
+
     <div id="cuestionario" style="display: none;">
         <div id="timer"></div>
         <h2 id="pregunta"></h2>
         <div id="opciones"></div>
     </div>
+
     <div id="resultado" style="display: none;">
         <h2 id="score"></h2>
         <div id="detalle"></div>
         <button id="volverBtn">Volver al Inicio</button>
         <button id="cerrarBtn">Cerrar</button>
     </div>
+
     <div id="formulario" style="display: none;">
         <h2>Agregar Nueva Pregunta</h2>
         <form id="nuevaPreguntaForm">
@@ -51,6 +64,7 @@
         <button id="volverFormularioBtn">Volver</button>
         <p id="mensajeFormulario" class="mensaje"></p>
     </div>
+
     <div id="historial" style="display: none;">
         <h2>Historial de Preguntas Realizadas</h2>
         <div id="contenidoHistorial"></div>

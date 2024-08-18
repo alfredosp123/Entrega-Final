@@ -1,33 +1,51 @@
-// Sección de preguntas y historial
-let preguntas = [];
+let preguntas = JSON.parse(localStorage.getItem('preguntas')) || [
+    {
+        pregunta: "¿Cómo se dice 'manzana' en inglés?",
+        opciones: ["Apple", "Banana", "Orange", "Grapes"],
+        respuesta: "Apple"
+    }
+];
+
 let historial = JSON.parse(localStorage.getItem('historial')) || [];
 let preguntaActual = 0;
 let score = 0;
 let resultados = [];
 let timer;
 let nombreCompleto;
+let rol;
 
 document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('seleccionarRolBtn').addEventListener('click', seleccionarRol);
     document.getElementById('comenzarBtn').addEventListener('click', comenzarCuestionario);
     document.getElementById('agregarBtn').addEventListener('click', mostrarFormulario);
     document.getElementById('borrarBtn').addEventListener('click', borrarPreguntas);
+    document.getElementById('borrarHistorialBtn').addEventListener('click', borrarHistorial);
     document.getElementById('agregarPreguntaBtn').addEventListener('click', agregarPregunta);
     document.getElementById('volverFormularioBtn').addEventListener('click', volverInicioDesdeFormulario);
     document.getElementById('volverBtn').addEventListener('click', volverInicio);
     document.getElementById('cerrarBtn').addEventListener('click', cerrarCuestionario);
     document.getElementById('verHistorialBtn').addEventListener('click', verHistorial);
     document.getElementById('volverInicioDesdeHistorialBtn').addEventListener('click', volverInicioDesdeHistorial);
-    cargarPreguntasDesdeArchivo();
-    document.getElementById('borrarHistorialBtn').addEventListener('click', borrarHistorial);
 });
 
-function cargarPreguntasDesdeArchivo() {
-    fetch('data.json')
-        .then(response => response.json())
-        .then(data => {
-            preguntas = data;
-        })
-        .catch(error => console.error('Error al cargar las preguntas desde el archivo JSON:', error));
+function seleccionarRol() {
+    rol = document.getElementById('rol').value;
+    localStorage.setItem('rol', rol);
+    document.getElementById('rolSeleccion').style.display = 'none';
+    document.getElementById('inicio').style.display = 'flex';
+    actualizarBotones();
+}
+
+function actualizarBotones() {
+    if (rol === 'alumno') {
+        document.getElementById('agregarBtn').style.display = 'none';
+        document.getElementById('borrarBtn').style.display = 'none';
+        document.getElementById('borrarHistorialBtn').style.display = 'none';
+    } else {
+        document.getElementById('agregarBtn').style.display = 'inline-block';
+        document.getElementById('borrarBtn').style.display = 'inline-block';
+        document.getElementById('borrarHistorialBtn').style.display = 'inline-block';
+    }
 }
 
 function guardarPreguntas() {
@@ -117,6 +135,10 @@ function startTimer() {
 }
 
 function mostrarFormulario() {
+    if (rol === 'alumno') {
+        alert('Solo los profesores pueden agregar preguntas.');
+        return;
+    }
     document.getElementById("inicio").style.display = "none";
     document.getElementById("formulario").style.display = "block";
 }
@@ -127,6 +149,11 @@ function volverInicioDesdeFormulario() {
 }
 
 function agregarPregunta() {
+    if (rol === 'alumno') {
+        alert('Solo los profesores pueden agregar preguntas.');
+        return;
+    }
+
     const pregunta = document.getElementById("nuevaPregunta").value.trim();
     const opcion1 = document.getElementById("opcion1").value.trim();
     const opcion2 = document.getElementById("opcion2").value.trim();
@@ -154,9 +181,23 @@ function agregarPregunta() {
 }
 
 function borrarPreguntas() {
+    if (rol === 'alumno') {
+        alert('Solo los profesores pueden borrar preguntas.');
+        return;
+    }
     preguntas = [];
     guardarPreguntas();
     document.getElementById("mensajeInicio").textContent = "Todas las preguntas han sido borradas.";
+}
+
+function borrarHistorial() {
+    if (rol === 'alumno') {
+        alert('Solo los profesores pueden borrar el historial.');
+        return;
+    }
+    historial = [];
+    guardarHistorial();
+    document.getElementById("mensajeInicio").textContent = "El historial ha sido borrado.";
 }
 
 function volverInicio() {
@@ -192,13 +233,19 @@ function resetCuestionario() {
     preguntaActual = 0;
     score = 0;
     resultados = [];
-    document.getElementById("mensajeNombre").textContent = '';
-    document.getElementById("mensajeInicio").textContent = '';
-    document.getElementById("mensajeFormulario").textContent = '';
+    clearInterval(timer);
+    document.getElementById("timer").textContent = '';
 }
 
-function borrarHistorial() {
-    historial = [];
-    guardarHistorial();
-    document.getElementById('mensajeInicio').textContent = "El historial ha sido borrado.";
+function startTimer() {
+    let timeLeft = 120;
+    document.getElementById("timer").textContent = `Tiempo restante: ${timeLeft} segundos`;
+    timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").textContent = `Tiempo restante: ${timeLeft} segundos`;
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            check(-1); // Autocheck si el tiempo se agota
+        }
+    }, 1000);
 }
