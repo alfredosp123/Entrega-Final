@@ -1,3 +1,4 @@
+// Datos iniciales y configuración
 let preguntas = JSON.parse(localStorage.getItem('preguntas')) || [
     {
         pregunta: "¿Cómo se dice 'manzana' en inglés?",
@@ -14,6 +15,7 @@ let timer;
 let nombreCompleto;
 let rol;
 
+// Event listeners
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('seleccionarRolBtn').addEventListener('click', seleccionarRol);
     document.getElementById('cambiarRolBtn').addEventListener('click', cambiarRol);
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('volverInicioDesdeHistorialBtn').addEventListener('click', volverInicioDesdeHistorial);
 });
 
+// Funciones principales
 function seleccionarRol() {
     rol = document.getElementById('rol').value;
     localStorage.setItem('rol', rol);
@@ -65,10 +68,9 @@ function guardarHistorial() {
 
 function comenzarCuestionario() {
     nombreCompleto = document.getElementById('nombreCompleto').value.trim();
-    const mensajeNombre = document.getElementById('mensajeNombre');
     
     if (nombreCompleto === "") {
-        mensajeNombre.textContent = "Por favor, ingresa tu nombre completo.";
+        Swal.fire('Error', 'Por favor, ingresa tu nombre completo.', 'error');
         return;
     }
 
@@ -143,7 +145,7 @@ function startTimer() {
 
 function mostrarFormulario() {
     if (rol === 'alumno') {
-        alert('Solo los profesores pueden agregar preguntas.');
+        Swal.fire('Acceso Denegado', 'Solo los profesores pueden agregar preguntas.', 'warning');
         return;
     }
     document.getElementById("inicio").style.display = "none";
@@ -167,7 +169,7 @@ function volverInicioDesdeFormulario() {
 
 function agregarPregunta() {
     if (rol === 'alumno') {
-        alert('Solo los profesores pueden agregar preguntas.');
+        Swal.fire('Acceso Denegado', 'Solo los profesores pueden agregar preguntas.', 'warning');
         return;
     }
 
@@ -180,7 +182,7 @@ function agregarPregunta() {
     const mensajeFormulario = document.getElementById("mensajeFormulario");
 
     if (pregunta === "" || opcion1 === "" || opcion2 === "" || opcion3 === "" || opcion4 === "" || respuesta === "") {
-        mensajeFormulario.textContent = "Por favor, completa todos los campos.";
+        Swal.fire('Error', 'Por favor, completa todos los campos.', 'error');
         return;
     }
 
@@ -194,28 +196,50 @@ function agregarPregunta() {
     guardarPreguntas();
 
     document.getElementById("nuevaPreguntaForm").reset();
-    mensajeFormulario.textContent = "Pregunta agregada exitosamente";
+    Swal.fire('Éxito', 'Pregunta agregada exitosamente', 'success');
     mostrarPreguntasFormulario(); // Actualizar vista de preguntas existentes
 }
 
 function borrarPreguntas() {
     if (rol === 'alumno') {
-        alert('Solo los profesores pueden borrar preguntas.');
+        Swal.fire('Acceso Denegado', 'Solo los profesores pueden borrar preguntas.', 'warning');
         return;
     }
-    preguntas = [];
-    guardarPreguntas();
-    document.getElementById("mensajeInicio").textContent = "Todas las preguntas han sido borradas.";
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción eliminará todas las preguntas.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, borrar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            preguntas = [];
+            guardarPreguntas();
+            Swal.fire('Éxito', 'Todas las preguntas han sido borradas.', 'success');
+        }
+    });
 }
 
 function borrarHistorial() {
     if (rol === 'alumno') {
-        alert('Solo los profesores pueden borrar el historial.');
+        Swal.fire('Acceso Denegado', 'Solo los profesores pueden borrar el historial.', 'warning');
         return;
     }
-    historial = [];
-    guardarHistorial();
-    document.getElementById("mensajeInicio").textContent = "El historial ha sido borrado.";
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción eliminará todo el historial.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, borrar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            historial = [];
+            guardarHistorial();
+            Swal.fire('Éxito', 'El historial ha sido borrado.', 'success');
+        }
+    });
 }
 
 function volverInicio() {
