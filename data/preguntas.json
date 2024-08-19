@@ -1,0 +1,52 @@
+[
+    {
+        "pregunta": "¿Cuál es la capital de Francia?",
+        "opciones": ["París", "Londres", "Berlín", "Madrid"],
+        "respuesta": "París"
+    },
+    {
+        "pregunta": "¿Qué es HTML?",
+        "opciones": ["Un lenguaje de programación", "Un lenguaje de marcado", "Un sistema operativo", "Un navegador web"],
+        "respuesta": "Un lenguaje de marcado"
+    },
+    {
+        "pregunta": "¿Cuál es el continente más grande?",
+        "opciones": ["África", "Asia", "América", "Europa"],
+        "respuesta": "Asia"
+    },
+    {
+        "pregunta": "¿Qué significa CSS?",
+        "opciones": ["Cascading Style Sheets", "Cascading Script Sheets", "Computer Style Sheets", "Common Style Sheets"],
+        "respuesta": "Cascading Style Sheets"
+    },
+    {
+        "pregunta": "¿Cuál es el planeta más cercano al sol?",
+        "opciones": ["Mercurio", "Venus", "Tierra", "Marte"],
+        "respuesta": "Mercurio"
+    },
+    {
+        "pregunta": "¿Quién escribió 'Cien años de soledad'?",
+        "opciones": ["Gabriel García Márquez", "Mario Vargas Llosa", "Pablo Neruda", "Isabel Allende"],
+        "respuesta": "Gabriel García Márquez"
+    },
+    {
+        "pregunta": "¿Cuál es el símbolo químico del oro?",
+        "opciones": ["Au", "Ag", "Pb", "Fe"],
+        "respuesta": "Au"
+    },
+    {
+        "pregunta": "¿Qué es un iframe?",
+        "opciones": ["Un contenedor de texto", "Un marco para otro documento", "Un tipo de enlace", "Un elemento de imagen"],
+        "respuesta": "Un marco para otro documento"
+    },
+    {
+        "pregunta": "¿Qué significa HTTP?",
+        "opciones": ["Hypertext Transfer Protocol", "Hyper Transfer Text Protocol", "Hyperlink Transfer Protocol", "Hypertext Transfer Program"],
+        "respuesta": "Hypertext Transfer Protocol"
+    },
+    {
+        "pregunta": "¿Cuál es la capital de Japón?",
+        "opciones": ["Seúl", "Pekín", "Tokio", "Osaka"],
+        "respuesta": "Tokio"
+    }
+]

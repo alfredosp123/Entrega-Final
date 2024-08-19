@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('cerrarBtn').addEventListener('click', cerrarCuestionario);
     document.getElementById('verHistorialBtn').addEventListener('click', verHistorial);
     document.getElementById('volverInicioDesdeHistorialBtn').addEventListener('click', volverInicioDesdeHistorial);
+    document.getElementById('obtenerPreguntaAleatoriaBtn').addEventListener('click', obtenerPreguntaAleatoria);
 });
 
 // Funciones principales
@@ -278,3 +279,4 @@ function resetCuestionario() {
     clearInterval(timer);
     document.getElementById("timer").textContent = '';
 }
+
