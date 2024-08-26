@@ -30,6 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('verHistorialBtn').addEventListener('click', verHistorial);
     document.getElementById('volverInicioDesdeHistorialBtn').addEventListener('click', volverInicioDesdeHistorial);
     document.getElementById('obtenerPreguntaAleatoriaBtn').addEventListener('click', obtenerPreguntaAleatoria);
+    document.getElementById("guardarCambiosBtn").addEventListener('click', guardarCambios);
+document.getElementById("cancelarEdicionBtn").addEventListener('click', () => {
+    document.getElementById("editarPreguntaModal").style.display = "none";
+    indicePreguntaEditando = null;
+});
 });
 
 // Funciones principales
